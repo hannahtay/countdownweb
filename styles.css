@@ -65,6 +65,25 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #f9f9f9;
+    display: block;
+    justify-content: space-between; /* Spaces out the name and date */
+    align-items: center; /* Vertically align the items */
+}
+
+.countdown .event-name {
+    font-weight: bold;
+    margin-bottom: 5px; /* Adds space after the event name */
+}
+
+.countdown .event-date {
+    font-style: italic;
+    color: gray;
+    margin-bottom: 10px; /* Adds space after the event date */
+}
+
+.countdown .timer {
+    font-size: 18px;
+    color: #333;
 }
 
 #countdownList {
