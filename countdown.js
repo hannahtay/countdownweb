@@ -9,6 +9,8 @@ if (!username) {
 // Display the username and fetch stored countdowns
 document.querySelector('.container').insertAdjacentHTML('afterbegin', `<h2>${username}'s countdowns </h2>`);
 
+let recentlyDeleted = null;
+
 // Load countdowns from localStorage
 function loadCountdowns() {
     const countdowns = JSON.parse(localStorage.getItem('countdowns')) || [];
@@ -33,9 +35,15 @@ function loadCountdowns() {
             <div class="event-name">${countdown.eventName}</div>
             <div class="event-date">📅 ${eventDateString}</div>
             <div class="timer" id="timer-${index}">${calculateTimeLeft(countdown.eventDate)}</div>
+            <button class="delete-btn" data-index="${index}">Delete</button>
         `;
         countdownList.appendChild(countdownElement);
         startCountdown(index, countdown.eventDate);
+    });
+
+     // Add event listeners to delete buttons
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', deleteCountdown);
     });
 }
 
@@ -55,6 +63,61 @@ document.getElementById('addCountdownForm').addEventListener('submit', function(
         alert('Please provide both event name and date!');
     }
 });
+
+// Delete a countdown
+function deleteCountdown(event) {
+    const index = event.target.getAttribute('data-index');
+    const countdowns = JSON.parse(localStorage.getItem('countdowns')) || [];
+    
+    const isConfirmed = window.confirm("Are you sure you want to delete this countdown?");
+    if (isConfirmed) {
+        recentlyDeleted = countdowns[index];
+        
+        // Remove the countdown from the array
+        countdowns.splice(index, 1);
+
+        // Update the localStorage
+        localStorage.setItem('countdowns', JSON.stringify(countdowns));
+
+        // Reload the countdown list
+        loadCountdowns();
+
+        showUndoButton();
+    }
+}
+
+function showUndoButton() {
+    const countdownList = document.getElementById('countdownList');
+    const undoButton = document.createElement('button');
+    undoButton.textContent = "Undo Delete";
+    undoButton.classList.add("undo-btn");
+    undoButton.addEventListener('click', undoDelete);
+
+    countdownList.appendChild(undoButton);
+    
+    // Hide the undo button after 5 seconds (auto remove)
+    setTimeout(() => {
+        undoButton.remove();
+    }, 5000);
+}
+
+function undoDelete() {
+    if (recentlyDeleted !== null) {
+        const countdowns = JSON.parse(localStorage.getItem('countdowns')) || [];
+
+        // Add the recently deleted countdown back
+        countdowns.push(recentlyDeleted);
+
+        // Update the localStorage
+        localStorage.setItem('countdowns', JSON.stringify(countdowns));
+
+        // Reload countdowns
+        loadCountdowns();
+
+        // Clear the recently deleted countdown
+        recentlyDeleted = null;
+    }
+}
 
 // Calculate the time left for each countdown
 function calculateTimeLeft(eventDate) {
