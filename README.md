@@ -9,3 +9,7 @@ To access the website, visit [here](https://hannahtay.github.io/countdownweb/)
 
 ### To be updated:
 ✅ User database
+
+## User Guide
+Enter any username and password of choice to sign in/create the account.
+User info should persist for the current session.
