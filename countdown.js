@@ -24,9 +24,15 @@ function loadCountdowns() {
     countdowns.forEach((countdown, index) => {
         const countdownElement = document.createElement('div');
         countdownElement.classList.add('countdown');
-        countdownElement.innerHTML = `
-            <h4>${countdown.eventName}</h4>
-            <p id="timer-${index}">${calculateTimeLeft(countdown.eventDate)}</p>
+
+        // Format the event date to display only the date part (no time)
+        const eventDate = new Date(countdown.eventDate);
+        const eventDateString = eventDate.toLocaleDateString(); // Only date without time
+
+         countdownElement.innerHTML = `
+            <div class="event-name">${countdown.eventName}</div>
+            <div class="event-date">📅 ${eventDateString}</div>
+            <div class="timer" id="timer-${index}">${calculateTimeLeft(countdown.eventDate)}</div>
         `;
         countdownList.appendChild(countdownElement);
         startCountdown(index, countdown.eventDate);
