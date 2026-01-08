@@ -1,5 +1,5 @@
 body {
-    font-family: 'Comic Sans MS';
+    font-family: 'Comic Sans MS',-apple-system, BlinkMacSystemFont, 'Poppins';
     display: flex;
     justify-content: center;
     align-items: center;
